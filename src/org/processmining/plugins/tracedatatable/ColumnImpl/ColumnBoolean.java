@@ -4,6 +4,7 @@ import java.text.ParseException;
 
 import org.processmining.plugins.tracedatatable.Column;
 import org.processmining.plugins.tracedatatable.ColumnType;
+import org.processmining.plugins.tracedatatable.ColumnAbstract.ColumnArrayPrimitive;
 
 public class ColumnBoolean extends ColumnArrayPrimitive<boolean[], Boolean> {
 	public ColumnBoolean(int size) {

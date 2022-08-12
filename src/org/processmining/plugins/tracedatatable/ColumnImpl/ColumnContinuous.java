@@ -3,6 +3,7 @@ package org.processmining.plugins.tracedatatable.ColumnImpl;
 import java.text.ParseException;
 
 import org.processmining.plugins.tracedatatable.ColumnType;
+import org.processmining.plugins.tracedatatable.ColumnAbstract.ColumnArrayPrimitive;
 
 public class ColumnContinuous extends ColumnArrayPrimitive<double[], Double> {
 	public ColumnContinuous(int size) {

@@ -1,21 +1,23 @@
-package org.processmining.plugins.tracedatatable.ColumnImpl;
+package org.processmining.plugins.tracedatatable.ColumnAbstract;
 
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 
 import org.processmining.plugins.tracedatatable.Column;
+import org.processmining.plugins.tracedatatable.ColumnImpl.ColumnCategoricalLiteral;
+import org.processmining.plugins.tracedatatable.ColumnImpl.ColumnLiteral;
 
 import com.google.gson.Gson;
 
-public abstract class ColumnCategoricalArray<I extends Comparable<I>> extends Column {
+public abstract class ColumnCategoricalArrayObject<I extends Comparable<I>> extends Column {
 	protected ArrayList<I> values;
 	protected int[] indices;
 
-	public ColumnCategoricalArray(int size) {
+	public ColumnCategoricalArrayObject(int size) {
 		this(new ArrayList<I>(), new int[size]);
 	}
-	public ColumnCategoricalArray(ArrayList<I> values, int[] indices) {
+	public ColumnCategoricalArrayObject(ArrayList<I> values, int[] indices) {
 		this.values = values;
 		this.indices = indices;
 	}
@@ -24,7 +26,7 @@ public abstract class ColumnCategoricalArray<I extends Comparable<I>> extends Co
 		return this.indices.length;
 	}
 	public void read(String s, Gson gson) {
-		ColumnCategoricalArray<I> o = gson.fromJson(s, this.getClass());
+		ColumnCategoricalArrayObject<I> o = gson.fromJson(s, this.getClass());
 		this.values = o.values;
 		this.indices = o.indices;
 	}
@@ -41,7 +43,7 @@ public abstract class ColumnCategoricalArray<I extends Comparable<I>> extends Co
 		this.indices[j] = t;
 	}
 	public void copyValuesTo(Column to, int start_from, int start_to, int count) {
-		ColumnCategoricalArray<I> c = (ColumnCategoricalArray<I>) to;
+		ColumnCategoricalArrayObject<I> c = (ColumnCategoricalArrayObject<I>) to;
 		int[] map = new int[this.values.size()];
 		for (int i = 0; i < map.length; i++)
 			map[i] = c.getOrAddIndex(this.values.get(i));

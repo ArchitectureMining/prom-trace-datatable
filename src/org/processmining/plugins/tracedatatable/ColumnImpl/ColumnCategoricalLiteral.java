@@ -4,8 +4,9 @@ import java.text.ParseException;
 import java.util.ArrayList;
 
 import org.processmining.plugins.tracedatatable.ColumnType;
+import org.processmining.plugins.tracedatatable.ColumnAbstract.ColumnCategoricalArrayObject;
 
-public class ColumnCategoricalLiteral extends ColumnCategoricalArray<String> {
+public class ColumnCategoricalLiteral extends ColumnCategoricalArrayObject<String> {
 	public ColumnCategoricalLiteral(int size) {
 		super(size);
 	}
