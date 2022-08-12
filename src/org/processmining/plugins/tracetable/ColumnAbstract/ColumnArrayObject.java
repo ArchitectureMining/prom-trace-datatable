@@ -1,4 +1,4 @@
-package org.processmining.plugins.tracedatatable.ColumnAbstract;
+package org.processmining.plugins.tracetable.ColumnAbstract;
 
 public abstract class ColumnArrayObject<I extends Object & Comparable<I>> extends ColumnArrayPrimitive<I[], I> {
 	public ColumnArrayObject(I[] values) {

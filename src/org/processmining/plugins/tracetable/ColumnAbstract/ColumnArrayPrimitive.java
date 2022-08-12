@@ -1,11 +1,11 @@
-package org.processmining.plugins.tracedatatable.ColumnAbstract;
+package org.processmining.plugins.tracetable.ColumnAbstract;
 
 import java.io.IOException;
 import java.text.ParseException;
 
-import org.processmining.plugins.tracedatatable.Column;
-import org.processmining.plugins.tracedatatable.ColumnImpl.ColumnCategoricalLiteral;
-import org.processmining.plugins.tracedatatable.ColumnImpl.ColumnLiteral;
+import org.processmining.plugins.tracetable.Column;
+import org.processmining.plugins.tracetable.ColumnImpl.ColumnCategoricalLiteral;
+import org.processmining.plugins.tracetable.ColumnImpl.ColumnLiteral;
 
 import com.google.gson.Gson;
 

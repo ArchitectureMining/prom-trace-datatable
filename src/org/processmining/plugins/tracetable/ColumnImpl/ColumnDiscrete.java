@@ -1,7 +1,7 @@
-package org.processmining.plugins.tracedatatable.ColumnImpl;
+package org.processmining.plugins.tracetable.ColumnImpl;
 
-import org.processmining.plugins.tracedatatable.ColumnType;
-import org.processmining.plugins.tracedatatable.ColumnAbstract.ColumnArrayPrimitive;
+import org.processmining.plugins.tracetable.ColumnType;
+import org.processmining.plugins.tracetable.ColumnAbstract.ColumnArrayPrimitive;
 
 public class ColumnDiscrete extends ColumnArrayPrimitive<long[], Long> {
 	public ColumnDiscrete(int size) {

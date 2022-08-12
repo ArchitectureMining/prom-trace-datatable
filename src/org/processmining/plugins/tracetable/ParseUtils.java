@@ -1,4 +1,4 @@
-package org.processmining.plugins.tracedatatable;
+package org.processmining.plugins.tracetable;
 
 import java.text.ParseException;
 import java.util.Date;

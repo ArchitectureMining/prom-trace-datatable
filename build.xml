@@ -1,4 +1,4 @@
-<project name="TraceDateTable" default="Compile Sources" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
+<project name="TraceTable" default="Compile Sources" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
 	<!-- set global properties for this build -->
 	<property environment="env" />
 	<property name="src" location="src" />
@@ -8,7 +8,7 @@
 	<property name="dist" location="dist" />
 	<property name="release" location="latestrelease" />
 	<property name="version" value="${major_minor}.${env.BUILD_NUMBER}" />
-	<property name="project" value="TraceDateTable" />
+	<property name="project" value="TraceTable" />
 
 	<property name="author" value="H.M.W. Verbeek" />
 	<property name="organization" value="Eindhoven University of Technology" />

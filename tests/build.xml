@@ -127,7 +127,7 @@
 
 	      <!-- JUnit: test cases to run -->
     	  <sysproperty key="test.testFileRoot" path="${dir.testfiles}"/>
-	      <test name="org.processmining.tests.tracedatetable.TraceDateTable" todir="${test.basedir}" />
+	      <test name="org.processmining.tests.tracetable.TraceDateTable" todir="${test.basedir}" />
 	    </junit>
 		
 		<!-- Cobertura: generate HTML coverage report -->

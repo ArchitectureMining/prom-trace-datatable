@@ -1,10 +1,10 @@
-package org.processmining.plugins.tracedatatable.ColumnImpl;
+package org.processmining.plugins.tracetable.ColumnImpl;
 
 import java.text.ParseException;
 
-import org.processmining.plugins.tracedatatable.Column;
-import org.processmining.plugins.tracedatatable.ColumnType;
-import org.processmining.plugins.tracedatatable.ColumnAbstract.ColumnArrayPrimitive;
+import org.processmining.plugins.tracetable.Column;
+import org.processmining.plugins.tracetable.ColumnType;
+import org.processmining.plugins.tracetable.ColumnAbstract.ColumnArrayPrimitive;
 
 public class ColumnBoolean extends ColumnArrayPrimitive<boolean[], Boolean> {
 	public ColumnBoolean(int size) {

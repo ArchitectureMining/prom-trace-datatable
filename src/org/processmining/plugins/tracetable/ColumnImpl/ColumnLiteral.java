@@ -1,7 +1,7 @@
-package org.processmining.plugins.tracedatatable.ColumnImpl;
+package org.processmining.plugins.tracetable.ColumnImpl;
 
-import org.processmining.plugins.tracedatatable.ColumnType;
-import org.processmining.plugins.tracedatatable.ColumnAbstract.ColumnArrayObject;
+import org.processmining.plugins.tracetable.ColumnType;
+import org.processmining.plugins.tracetable.ColumnAbstract.ColumnArrayObject;
 
 public class ColumnLiteral extends ColumnArrayObject<String> {
 	public ColumnLiteral(int size) {

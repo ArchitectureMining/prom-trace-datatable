@@ -1,12 +1,12 @@
-package org.processmining.plugins.tracedatatable.ColumnImpl;
+package org.processmining.plugins.tracetable.ColumnImpl;
 
 import java.text.ParseException;
 import java.util.Date;
 
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.commons.lang.time.DateUtils;
-import org.processmining.plugins.tracedatatable.ColumnType;
-import org.processmining.plugins.tracedatatable.ColumnAbstract.ColumnArrayObject;
+import org.processmining.plugins.tracetable.ColumnType;
+import org.processmining.plugins.tracetable.ColumnAbstract.ColumnArrayObject;
 
 public class ColumnTimestamp extends ColumnArrayObject<Date> {
 	public ColumnTimestamp(int size) {

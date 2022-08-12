@@ -1,4 +1,4 @@
-package org.processmining.plugins.tracedatatable;
+package org.processmining.plugins.tracetable;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -10,22 +10,22 @@ import org.processmining.framework.plugin.annotations.Plugin;
 import org.processmining.framework.plugin.annotations.PluginVariant;
 
 @Plugin(
-    name = "TraceSet Export",
+    name = TraceTable.Name + " Export",
     returnLabels = {},
     returnTypes = {},
-    parameterLabels = { "TraceSet", "File" },
+    parameterLabels = { TraceTable.Name, "File" },
     userAccessible = true
 )
 @UIExportPlugin(
-    description = "TraceSet file",
-    extension = "traceset"
+    description = TraceTable.Name + " file",
+    extension = TraceTable.Extension
 )
-public class TraceSetExportPlugin {
+public class TraceTableExportPlugin {
 	@PluginVariant(
-	    variantLabel = "TraceSet Export",
+	    variantLabel = TraceTable.Name + " Export",
 	    requiredParameterLabels = { 0, 1 }
 	)
-	public static void export(PluginContext context, TraceSet set, File file) throws IOException {
+	public static void export(PluginContext context, TraceTable set, File file) throws IOException {
 		FileWriter out = new FileWriter(file);
 		set.write(out);
 		out.close();

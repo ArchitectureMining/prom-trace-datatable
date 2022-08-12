@@ -1,4 +1,4 @@
-package org.processmining.plugins.tracedatatable;
+package org.processmining.plugins.tracetable;
 
 import java.text.ParseException;
 import java.util.HashMap;
@@ -11,12 +11,12 @@ import org.deckfour.xes.model.XAttributeDiscrete;
 import org.deckfour.xes.model.XAttributeLiteral;
 import org.deckfour.xes.model.XAttributeMap;
 import org.deckfour.xes.model.XAttributeTimestamp;
-import org.processmining.plugins.tracedatatable.ColumnImpl.ColumnBoolean;
-import org.processmining.plugins.tracedatatable.ColumnImpl.ColumnCategoricalLiteral;
-import org.processmining.plugins.tracedatatable.ColumnImpl.ColumnContinuous;
-import org.processmining.plugins.tracedatatable.ColumnImpl.ColumnDiscrete;
-import org.processmining.plugins.tracedatatable.ColumnImpl.ColumnLiteral;
-import org.processmining.plugins.tracedatatable.ColumnImpl.ColumnTimestamp;
+import org.processmining.plugins.tracetable.ColumnImpl.ColumnBoolean;
+import org.processmining.plugins.tracetable.ColumnImpl.ColumnCategoricalLiteral;
+import org.processmining.plugins.tracetable.ColumnImpl.ColumnContinuous;
+import org.processmining.plugins.tracetable.ColumnImpl.ColumnDiscrete;
+import org.processmining.plugins.tracetable.ColumnImpl.ColumnLiteral;
+import org.processmining.plugins.tracetable.ColumnImpl.ColumnTimestamp;
 
 import com.google.gson.Gson;
 

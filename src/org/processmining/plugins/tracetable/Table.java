@@ -1,4 +1,4 @@
-package org.processmining.plugins.tracedatatable;
+package org.processmining.plugins.tracetable;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -6,14 +6,15 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
-import org.processmining.plugins.tracedatatable.ColumnImpl.ColumnBoolean;
-import org.processmining.plugins.tracedatatable.ColumnImpl.ColumnCategoricalLiteral;
-import org.processmining.plugins.tracedatatable.ColumnImpl.ColumnContinuous;
-import org.processmining.plugins.tracedatatable.ColumnImpl.ColumnDiscrete;
-import org.processmining.plugins.tracedatatable.ColumnImpl.ColumnLiteral;
-import org.processmining.plugins.tracedatatable.ColumnImpl.ColumnTimestamp;
+import org.processmining.plugins.tracetable.ColumnImpl.ColumnBoolean;
+import org.processmining.plugins.tracetable.ColumnImpl.ColumnCategoricalLiteral;
+import org.processmining.plugins.tracetable.ColumnImpl.ColumnContinuous;
+import org.processmining.plugins.tracetable.ColumnImpl.ColumnDiscrete;
+import org.processmining.plugins.tracetable.ColumnImpl.ColumnLiteral;
+import org.processmining.plugins.tracetable.ColumnImpl.ColumnTimestamp;
+
+import java.util.Set;
 
 import com.google.gson.Gson;
 

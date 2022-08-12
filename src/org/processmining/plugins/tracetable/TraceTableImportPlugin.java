@@ -1,4 +1,4 @@
-package org.processmining.plugins.tracedatatable;
+package org.processmining.plugins.tracetable;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,22 +14,21 @@ import org.processmining.framework.plugin.PluginContext;
 import org.processmining.framework.plugin.annotations.Plugin;
 
 @Plugin(
-    name = "TraceSet Import",
+	name = TraceTable.Name + " Import",
     parameterLabels = { "Filename" },
-    returnLabels = { "TraceSet" },
-    returnTypes = { TraceSet.class }
+    returnLabels = { TraceTable.Name },
+    returnTypes = { TraceTable.class }
 )
 @UIImportPlugin(
-    description = "TraceSet file",
-    extensions = { "traceset" }
+    description = TraceTable.Name + " file",
+    extensions = { TraceTable.Extension }
 )
-public class TraceSetImportPlugin extends AbstractImportPlugin {
-
+public class TraceTableImportPlugin extends AbstractImportPlugin {
 	protected FileFilter getFileFilter() {
-		return new FileNameExtensionFilter("TraceSet file", "traceset");
+		return new FileNameExtensionFilter(TraceTable.Name + " file", TraceTable.Extension);
 	}
 
 	protected Object importFromStream(PluginContext context, InputStream input, String filename, long fileSizeInBytes) throws IOException {
-		return TraceSet.read(new BufferedReader(new InputStreamReader(input)));
+		return TraceTable.read(new BufferedReader(new InputStreamReader(input)));
 	}
 }

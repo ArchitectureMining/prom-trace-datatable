@@ -1,10 +1,10 @@
-package org.processmining.plugins.tracedatatable.ColumnImpl;
+package org.processmining.plugins.tracetable.ColumnImpl;
 
 import java.text.ParseException;
 import java.util.ArrayList;
 
-import org.processmining.plugins.tracedatatable.ColumnType;
-import org.processmining.plugins.tracedatatable.ColumnAbstract.ColumnCategoricalArrayObject;
+import org.processmining.plugins.tracetable.ColumnType;
+import org.processmining.plugins.tracetable.ColumnAbstract.ColumnCategoricalArrayObject;
 
 public class ColumnCategoricalLiteral extends ColumnCategoricalArrayObject<String> {
 	public ColumnCategoricalLiteral(int size) {

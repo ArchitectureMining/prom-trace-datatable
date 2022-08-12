@@ -1,4 +1,4 @@
-package org.processmining.plugins.tracedatatable;
+package org.processmining.plugins.tracetable;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,16 +18,19 @@ import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
 import org.processmining.framework.plugin.Progress;
 import org.processmining.framework.util.Pair;
-import org.processmining.plugins.tracedatatable.ColumnImpl.ColumnBoolean;
-import org.processmining.plugins.tracedatatable.ColumnImpl.ColumnCategoricalLiteral;
-import org.processmining.plugins.tracedatatable.ColumnImpl.ColumnContinuous;
-import org.processmining.plugins.tracedatatable.ColumnImpl.ColumnDiscrete;
-import org.processmining.plugins.tracedatatable.ColumnImpl.ColumnLiteral;
-import org.processmining.plugins.tracedatatable.ColumnImpl.ColumnTimestamp;
+import org.processmining.plugins.tracetable.ColumnImpl.ColumnBoolean;
+import org.processmining.plugins.tracetable.ColumnImpl.ColumnCategoricalLiteral;
+import org.processmining.plugins.tracetable.ColumnImpl.ColumnContinuous;
+import org.processmining.plugins.tracetable.ColumnImpl.ColumnDiscrete;
+import org.processmining.plugins.tracetable.ColumnImpl.ColumnLiteral;
+import org.processmining.plugins.tracetable.ColumnImpl.ColumnTimestamp;
 
 import com.google.gson.Gson;
 
-public class TraceSet {
+public class TraceTable {
+	// For ProM Plugin Management
+	public static final String Name = "TraceTable";
+	public static final String Extension = "tracetable";
 	// Stored in file
 	public static final String MetaEventCount = "meta:event_count";
 	// Required
@@ -39,7 +42,7 @@ public class TraceSet {
 	public final Table Traces, TraceMeta;
 	public final Table Events, EventMeta;
 
-	public TraceSet(Table traces, ColumnDiscrete event_count, Table events) {
+	public TraceTable(Table traces, ColumnDiscrete event_count, Table events) {
 		this.Traces = traces;
 		this.TraceMeta = new Table(traces.length());
 		this.Events = events;
@@ -146,17 +149,17 @@ public class TraceSet {
 		out.append('\n');
 		this.Events.write(out, gson);
 	}
-	public static TraceSet read(BufferedReader r) throws IOException {
+	public static TraceTable read(BufferedReader r) throws IOException {
 		return read(r, new Gson());
 	}
-	public static TraceSet read(BufferedReader r, Gson gson) throws IOException {
-		return new TraceSet(Table.read(r, gson), (ColumnDiscrete)ColumnType.Discrete.read(r.readLine(), gson), Table.read(r, gson));
+	public static TraceTable read(BufferedReader r, Gson gson) throws IOException {
+		return new TraceTable(Table.read(r, gson), (ColumnDiscrete)ColumnType.Discrete.read(r.readLine(), gson), Table.read(r, gson));
 	}
 
-	public static TraceSet create(XLog log, Progress progress) {
+	public static TraceTable create(XLog log, Progress progress) {
 		Pair<XTrace,XEvent> first_items = getFirstLogItems(log);
 		if (first_items == null)
-			return new TraceSet(new Table(0), new ColumnDiscrete(0), new Table(0));
+			return new TraceTable(new Table(0), new ColumnDiscrete(0), new Table(0));
 
 		Map<String, ColumnType> trace_columns = ColumnType.from(first_items.getFirst().getAttributes());
 		Map<String, ColumnType> event_columns = ColumnType.from(first_items.getSecond().getAttributes());
@@ -170,7 +173,7 @@ public class TraceSet {
 			trace_id++;
 		}
 
-		TraceSet set = new TraceSet(
+		TraceTable set = new TraceTable(
 		    new Table(trace_id, trace_columns),
 		    count,
 		    new Table(event_id, event_columns)
