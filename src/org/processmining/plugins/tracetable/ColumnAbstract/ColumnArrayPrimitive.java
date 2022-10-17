@@ -1,11 +1,8 @@
 package org.processmining.plugins.tracetable.ColumnAbstract;
 
 import java.io.IOException;
-import java.text.ParseException;
 
 import org.processmining.plugins.tracetable.Column;
-import org.processmining.plugins.tracetable.ColumnImpl.ColumnCategoricalLiteral;
-import org.processmining.plugins.tracetable.ColumnImpl.ColumnLiteral;
 
 import com.google.gson.Gson;
 
@@ -36,7 +33,9 @@ public abstract class ColumnArrayPrimitive<A, I extends Comparable<I>> extends C
 		java.lang.reflect.Array.set(a, i, v);
 	}
 	public int compareValues(int i, int j) {
+		@SuppressWarnings("unchecked")
 		I oi = (I) get(this.values, i);
+		@SuppressWarnings("unchecked")
 		I oj = (I) get(this.values, j);
 		return oi.compareTo(oj);
 	}
@@ -46,20 +45,16 @@ public abstract class ColumnArrayPrimitive<A, I extends Comparable<I>> extends C
 		this.set(this.values, j, oi);
 	}
 
-	protected abstract I parse(String s) throws NumberFormatException, ParseException;
-	protected void parseUnchecked(String[] c, A into) throws NumberFormatException, ParseException {
-		for (int i = 0; i < c.length; i++)
-			java.lang.reflect.Array.set(into, i, parse(c[i]));
+	@Override
+	protected boolean canTypeLiteral() {
+		return true;
 	}
-	protected void parseUnchecked(ColumnLiteral c) throws ParseException {
-		parseUnchecked(c.values, this.values);
+	@Override
+	protected String intoTypeLiteral(int i) {
+		return get(this.values, i).toString();
 	}
-	protected void parseUnchecked(ColumnCategoricalLiteral c) throws ParseException {
-		A map = (A) java.lang.reflect.Array.newInstance(this.getValuesClass(), c.values.size());
-		parseUnchecked((String[])c.values.toArray(), map);
-		for (int i = 0; i < c.indices.length; i++)
-			set(this.values, i, get(map, c.indices[i]));
-	}
+
+	@SuppressWarnings("unchecked")
 	public void copyValuesTo(Column to, int start_from, int start_to, int count) {
 		System.arraycopy(this.values, start_from, ((ColumnArrayPrimitive<A, I>)to).values, start_to, count);
 	}

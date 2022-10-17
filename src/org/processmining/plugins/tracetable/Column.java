@@ -3,10 +3,16 @@ package org.processmining.plugins.tracetable;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.Collection;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.Map;
 
+import org.processmining.plugins.tracetable.ColumnImpl.ColumnBoolean;
 import org.processmining.plugins.tracetable.ColumnImpl.ColumnCategoricalLiteral;
+import org.processmining.plugins.tracetable.ColumnImpl.ColumnContinuous;
+import org.processmining.plugins.tracetable.ColumnImpl.ColumnDiscrete;
 import org.processmining.plugins.tracetable.ColumnImpl.ColumnLiteral;
+import org.processmining.plugins.tracetable.ColumnImpl.ColumnTimestamp;
 
 import com.google.gson.Gson;
 
@@ -30,19 +36,144 @@ public abstract class Column {
 
 	public abstract Column clone();
 
-	public void parse(ColumnLiteral c) throws NumberFormatException, ParseException {
-		if (this.length() != c.length())
-			throw new IllegalArgumentException("To-be parsed column needs to be of the same length as the column being parsed into");
-		this.parseUnchecked(c);
+	public HashSet<ColumnType> getIntoTypes() {
+		HashSet<ColumnType> s = new HashSet<ColumnType>();
+		if (this.canTypeBoolean())
+			s.add(ColumnType.Boolean);
+		if (this.canTypeContinuous())
+			s.add(ColumnType.Continuous);
+		if (this.canTypeDiscrete())
+			s.add(ColumnType.Discrete);
+		if (this.canTypeLiteral()) {
+			s.add(ColumnType.Literal);
+			s.add(ColumnType.CategoricalLiteral);
+		}
+		if (this.canTypeTimestamp())
+			s.add(ColumnType.Timestamp);
+		return s;
 	}
-	public void parse(ColumnCategoricalLiteral c) throws NumberFormatException, ParseException {
-		if (this.length() != c.length())
-			throw new IllegalArgumentException("To-be parsed column needs to be of the same length as the column being parsed into");
-		this.parseUnchecked(c);
-	}
-	protected abstract void parseUnchecked(ColumnLiteral c) throws ParseException, NumberFormatException;
-	protected abstract void parseUnchecked(ColumnCategoricalLiteral c) throws ParseException, NumberFormatException;
 
+	public Column intoType(ColumnType c) throws NumberFormatException, ParseException {
+		switch (c) {
+		case Boolean:
+			return this.intoTypeBoolean();
+		case Continuous:
+			return this.intoTypeContinuous();
+		case Discrete:
+			return this.intoTypeDiscrete();
+		case Literal:
+			return this.intoTypeLiteral();
+		case CategoricalLiteral:
+			return this.intoTypeCategoricalLiteral();
+		case Timestamp:
+			return this.intoTypeTimestamp();
+		default:
+			intoTypeError(c);
+			return null;
+		}
+	}
+	protected ColumnBoolean intoTypeBoolean() throws NumberFormatException {
+		if (!this.canTypeBoolean()) {
+			intoTypeError(ColumnType.Boolean);
+			return null;
+		}
+		ColumnBoolean c = new ColumnBoolean(this.length());
+		for (int i = 0; i < c.length(); i++)
+			c.set(i, this.intoTypeBoolean(i));
+		return c;
+	}
+	protected ColumnContinuous intoTypeContinuous() throws NumberFormatException {
+		if (!this.canTypeContinuous()) {
+			intoTypeError(ColumnType.Continuous);
+			return null;
+		}
+		ColumnContinuous c = new ColumnContinuous(this.length());
+		for (int i = 0; i < c.length(); i++)
+			c.set(i, this.intoTypeContinuous(i));
+		return c;
+	}
+	protected ColumnDiscrete intoTypeDiscrete() throws NumberFormatException {
+		if (!this.canTypeDiscrete()) {
+			intoTypeError(ColumnType.Discrete);
+			return null;
+		}
+		ColumnDiscrete c = new ColumnDiscrete(this.length());
+		for (int i = 0; i < c.length(); i++)
+			c.set(i, this.intoTypeDiscrete(i));
+		return c;
+	}
+	protected ColumnLiteral intoTypeLiteral() {
+		if (!this.canTypeLiteral()) {
+			intoTypeError(ColumnType.Literal);
+			return null;
+		}
+		ColumnLiteral c = new ColumnLiteral(this.length());
+		for (int i = 0; i < c.length(); i++)
+			c.set(i, this.intoTypeLiteral(i));
+		return c;
+	}
+	protected ColumnCategoricalLiteral intoTypeCategoricalLiteral() {
+		if (!this.canTypeLiteral()) {
+			intoTypeError(ColumnType.CategoricalLiteral);
+			return null;
+		}
+		ColumnCategoricalLiteral c = new ColumnCategoricalLiteral(this.length());
+		for (int i = 0; i < c.length(); i++)
+			c.set(i, this.intoTypeLiteral(i));
+		return c;
+	}
+	protected ColumnTimestamp intoTypeTimestamp() throws ParseException {
+		if (!this.canTypeTimestamp()) {
+			intoTypeError(ColumnType.Timestamp);
+			return null;
+		}
+		ColumnTimestamp c = new ColumnTimestamp(this.length());
+		for (int i = 0; i < c.length(); i++)
+			c.set(i, this.intoTypeTimestamp(i));
+		return c;
+	}
+
+	protected boolean intoTypeBoolean(int i) {
+		intoTypeError(ColumnType.Boolean);
+		return false;
+	}
+	protected double intoTypeContinuous(int i) throws NumberFormatException {
+		intoTypeError(ColumnType.Continuous);
+		return 0;
+	}
+	protected long intoTypeDiscrete(int i) throws NumberFormatException {
+		intoTypeError(ColumnType.Discrete);
+		return 0;
+	}
+	protected String intoTypeLiteral(int i) {
+		intoTypeError(ColumnType.Literal);
+		return null;
+	}
+	@SuppressWarnings("unused")
+	protected Date intoTypeTimestamp(int i) throws ParseException {
+		intoTypeError(ColumnType.Timestamp);
+		return null;
+	}
+
+	protected boolean canTypeBoolean() {
+		return false;
+	}
+	protected boolean canTypeContinuous() {
+		return false;
+	}
+	protected boolean canTypeDiscrete() {
+		return false;
+	}
+	protected boolean canTypeLiteral() {
+		return false;
+	}
+	protected boolean canTypeTimestamp() {
+		return false;
+	}
+
+	protected void intoTypeError(ColumnType c) {
+		throw new IllegalArgumentException(String.format("Cannot parse column with kind %s into kind %s", c, this.kind()));
+	}
 
 	public static void sort(Map<String, Column> columns, String[] order) {
 		Column[] column_order = new Column[order.length];

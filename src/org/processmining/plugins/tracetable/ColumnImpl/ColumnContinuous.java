@@ -1,7 +1,5 @@
 package org.processmining.plugins.tracetable.ColumnImpl;
 
-import java.text.ParseException;
-
 import org.processmining.plugins.tracetable.ColumnType;
 import org.processmining.plugins.tracetable.ColumnAbstract.ColumnArrayPrimitive;
 
@@ -18,9 +16,6 @@ public class ColumnContinuous extends ColumnArrayPrimitive<double[], Double> {
 	public ColumnType kind() {
 		return ColumnType.Continuous;
 	}
-	protected Double parse(String s) throws NumberFormatException, ParseException {
-		return Double.parseDouble(s);
-	}
 	public ColumnContinuous clone() {
 		return new ColumnContinuous(this.values.clone());
 	}
@@ -29,5 +24,27 @@ public class ColumnContinuous extends ColumnArrayPrimitive<double[], Double> {
 	}
 	public void set(int i, double value) {
 		this.values[i] = value;
+	}
+
+	protected boolean canTypeBoolean() {
+		return true;
+	}
+	protected boolean intoTypeBoolean(int i) {
+		return this.values[i] != 0;
+	}
+	protected boolean canTypeContinuous(int i) {
+		return true;
+	}
+	protected ColumnContinuous intoTypeContinuous() {
+		return this;
+	}
+	protected double intoTypeContinuous(int i) {
+		return this.values[i];
+	}
+	protected boolean canTypeDiscrete() {
+		return true;
+	}
+	protected long intoTypeDiscrete(int i) {
+		return (long) this.values[i];
 	}
 }

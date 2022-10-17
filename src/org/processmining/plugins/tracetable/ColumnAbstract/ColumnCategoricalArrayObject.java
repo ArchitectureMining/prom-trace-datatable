@@ -1,12 +1,10 @@
 package org.processmining.plugins.tracetable.ColumnAbstract;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.ArrayList;
 
 import org.processmining.plugins.tracetable.Column;
 import org.processmining.plugins.tracetable.ColumnImpl.ColumnCategoricalLiteral;
-import org.processmining.plugins.tracetable.ColumnImpl.ColumnLiteral;
 
 import com.google.gson.Gson;
 
@@ -26,6 +24,7 @@ public abstract class ColumnCategoricalArrayObject<I extends Comparable<I>> exte
 		return this.indices.length;
 	}
 	public void read(String s, Gson gson) {
+		@SuppressWarnings("unchecked")
 		ColumnCategoricalArrayObject<I> o = gson.fromJson(s, this.getClass());
 		this.values = o.values;
 		this.indices = o.indices;
@@ -43,6 +42,7 @@ public abstract class ColumnCategoricalArrayObject<I extends Comparable<I>> exte
 		this.indices[j] = t;
 	}
 	public void copyValuesTo(Column to, int start_from, int start_to, int count) {
+		@SuppressWarnings("unchecked")
 		ColumnCategoricalArrayObject<I> c = (ColumnCategoricalArrayObject<I>) to;
 		int[] map = new int[this.values.size()];
 		for (int i = 0; i < map.length; i++)
@@ -51,15 +51,21 @@ public abstract class ColumnCategoricalArrayObject<I extends Comparable<I>> exte
 			c.indices[start_to + i] = map[this.indices[start_from + i]];
 	}
 
-	protected abstract I parseUnchecked(String c) throws ParseException;
-	protected void parseUnchecked(ColumnLiteral c) throws ParseException {
-		for (int i = 0; i < c.values.length; i++)
-			this.set(i, parseUnchecked(c.values[i]));
+	@Override
+	protected boolean canTypeLiteral() {
+		return true;
 	}
-	protected void parseUnchecked(ColumnCategoricalLiteral c) throws ParseException {
-		this.indices = c.indices;
-		for (String s : c.values)
-			this.values.add(parseUnchecked(s));
+	@Override
+	protected String intoTypeLiteral(int i) {
+		return this.getMapped(i).toString();
+	}
+	@Override
+	protected ColumnCategoricalLiteral intoTypeCategoricalLiteral() {
+		ColumnCategoricalLiteral c = new ColumnCategoricalLiteral(this.length());
+		for (I i : this.values)
+			c.values.add(i.toString());
+		c.indices = this.indices;
+		return c;
 	}
 
 	public int get(int i) {
@@ -71,9 +77,9 @@ public abstract class ColumnCategoricalArrayObject<I extends Comparable<I>> exte
 	public I map(int i) {
 		return this.values.get(i);
 	}
-	private int getOrAddIndex(I v) {
+	protected int getOrAddIndex(I v) {
 		int index = this.values.indexOf(v);
-		if (index < -1) {
+		if (index < 0) {
 			index = this.values.size();
 			this.values.add(v);
 		}

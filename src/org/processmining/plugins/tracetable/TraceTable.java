@@ -35,9 +35,6 @@ public class TraceTable {
 	public static final String MetaEventCount = "meta:event_count";
 	// Required
 	public static final String MetaTraceId = "meta:trace_id";
-	// Optional
-	public static final String MetaEventStartTime = "meta:event_start_time";
-	public static final String MetaEventEndTime = "meta:event_end_time";
 
 	public final Table Traces, TraceMeta;
 	public final Table Events, EventMeta;
@@ -61,25 +58,6 @@ public class TraceTable {
 		}
 	}
 
-	public void generateTimeMetadata(String timestampColumn) {
-		this.TraceMeta.remove(MetaEventStartTime);
-		this.TraceMeta.remove(MetaEventEndTime);
-
-		ColumnTimestamp event_timestamp = (ColumnTimestamp) this.Events.get(timestampColumn);
-		ColumnDiscrete event_count = (ColumnDiscrete) this.TraceMeta.get(MetaEventCount);
-
-		this.sort(new Column[] {this.TraceMeta.get(MetaTraceId)}, new Column[] {this.EventMeta.get(MetaTraceId), event_timestamp});
-
-		ColumnTimestamp event_starttime = (ColumnTimestamp) this.TraceMeta.add(MetaEventStartTime, ColumnType.Timestamp);
-		ColumnTimestamp event_endtime = (ColumnTimestamp) this.TraceMeta.add(MetaEventEndTime, ColumnType.Timestamp);
-
-		int esid = 0;
-		for (int t = 0; t < this.Traces.length(); t++) {
-			event_starttime.set(t, event_timestamp.get(esid));
-			esid += event_count.get(t);
-			event_endtime.set(t, event_timestamp.get(esid - 1));
-		}
-	}
 	public void clearMetadata() {
 		Column count = this.TraceMeta.get(MetaEventCount), trace = this.TraceMeta.get(MetaTraceId), event = this.EventMeta.get(MetaTraceId);
 		this.TraceMeta.clear();

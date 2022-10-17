@@ -1,6 +1,5 @@
 package org.processmining.plugins.tracetable;
 
-import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -26,31 +25,20 @@ public enum ColumnType {
 	Discrete,
 	Literal,
 	CategoricalLiteral,
-	Timestamp;
-
-	public static ColumnType[] getAlternatives(ColumnType type) {
-		if (type == ColumnType.Literal || type == ColumnType.CategoricalLiteral) {
-			return ColumnType.values();
-		} else {
-			return new ColumnType[] {
-			           type,
-			           ColumnType.Literal,
-			           ColumnType.CategoricalLiteral,
-			       };
-		}
-	}
+	Timestamp,
+	Custom;
 
 	public static ColumnType from(XAttribute a) {
 		if (a instanceof XAttributeBoolean)
-			return ColumnType.Boolean;
+			return Boolean;
 		if (a instanceof XAttributeContinuous)
-			return ColumnType.Continuous;
+			return Continuous;
 		if (a instanceof XAttributeDiscrete)
-			return ColumnType.Discrete;
+			return Discrete;
 		if (a instanceof XAttributeTimestamp)
-			return ColumnType.Timestamp;
+			return Timestamp;
 		if (a instanceof XAttributeLiteral)
-			return ColumnType.Literal;
+			return Literal;
 		throw new ClassCastException("XAttribute could not be casted to a known type.");
 	}
 	public static HashMap<String, ColumnType> from(XAttributeMap attrs) {
@@ -77,26 +65,11 @@ public enum ColumnType {
 			return new ColumnCategoricalLiteral(size);
 		case Timestamp:
 			return new ColumnTimestamp(size);
+		case Custom:
+			throw new IllegalStateException("Cannot create a new column of type Custom");
 		default:
 			return null;
 		}
-	}
-	public Column parse(Column c) throws NumberFormatException, ParseException {
-		if (c instanceof ColumnLiteral)
-			return this.parse((ColumnLiteral)c);
-		if (c instanceof ColumnCategoricalLiteral)
-			return this.parse((ColumnCategoricalLiteral)c);
-		throw new ClassCastException("Could not cast column to a literal column");
-	}
-	public Column parse(ColumnLiteral c) throws NumberFormatException, ParseException {
-		Column nc = this.create(c.length());
-		nc.parse(c);
-		return nc;
-	}
-	public Column parse(ColumnCategoricalLiteral c) throws NumberFormatException, ParseException {
-		Column nc = this.create(c.length());
-		nc.parse(c);
-		return nc;
 	}
 	private Column createNull() {
 		switch (this) {
@@ -112,6 +85,8 @@ public enum ColumnType {
 			return new ColumnCategoricalLiteral(null, null);
 		case Timestamp:
 			return new ColumnTimestamp(null);
+		case Custom:
+			throw new IllegalStateException("Cannot create a new column of type Custom");
 		default:
 			return null;
 		}

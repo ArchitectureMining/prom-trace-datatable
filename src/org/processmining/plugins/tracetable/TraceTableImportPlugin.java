@@ -14,7 +14,7 @@ import org.processmining.framework.plugin.PluginContext;
 import org.processmining.framework.plugin.annotations.Plugin;
 
 @Plugin(
-	name = TraceTable.Name + " Import",
+    name = TraceTable.Name + " Import",
     parameterLabels = { "Filename" },
     returnLabels = { TraceTable.Name },
     returnTypes = { TraceTable.class }

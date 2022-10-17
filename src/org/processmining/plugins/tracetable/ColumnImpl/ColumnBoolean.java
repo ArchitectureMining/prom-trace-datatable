@@ -1,7 +1,5 @@
 package org.processmining.plugins.tracetable.ColumnImpl;
 
-import java.text.ParseException;
-
 import org.processmining.plugins.tracetable.Column;
 import org.processmining.plugins.tracetable.ColumnType;
 import org.processmining.plugins.tracetable.ColumnAbstract.ColumnArrayPrimitive;
@@ -19,17 +17,44 @@ public class ColumnBoolean extends ColumnArrayPrimitive<boolean[], Boolean> {
 	public ColumnType kind() {
 		return ColumnType.Boolean;
 	}
-	protected Boolean parse(String s) throws NumberFormatException, ParseException {
-		return Boolean.parseBoolean(s);
-	}
 	public Column clone() {
 		return new ColumnBoolean(this.values.clone());
 	}
-
 	public boolean get(int i) {
 		return this.values[i];
 	}
 	public void set(int i, boolean value) {
 		this.values[i] = value;
+	}
+
+	@Override
+	protected boolean canTypeBoolean() {
+		return true;
+	}
+	@Override
+	protected ColumnBoolean intoTypeBoolean() {
+		return this;
+	}
+	@Override
+	protected boolean intoTypeBoolean(int i) {
+		return this.values[i];
+	}
+
+	@Override
+	protected boolean canTypeContinuous() {
+		return true;
+	}
+	@Override
+	protected double intoTypeContinuous(int i) {
+		return this.values[i] ? 1 : 0;
+	}
+
+	@Override
+	protected boolean canTypeDiscrete() {
+		return true;
+	}
+	@Override
+	protected long intoTypeDiscrete(int i) {
+		return this.values[i] ? 1 : 0;
 	}
 }
