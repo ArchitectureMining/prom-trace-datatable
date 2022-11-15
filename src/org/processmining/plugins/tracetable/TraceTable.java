@@ -157,12 +157,13 @@ public class TraceTable {
 		    new Table(event_id, event_columns)
 		);
 
+		ArrayList<String> removeKeys = new ArrayList<String>();
 		trace_id = 0;
 		event_id = 0;
 		for (XTrace trace : log) {
-			createSet(set.Traces, trace_id, trace.getAttributes());
+			createSet(set.Traces, trace_id, trace.getAttributes(), removeKeys);
 			for (XEvent event : trace) {
-				createSet(set.Events, event_id, event.getAttributes());
+				createSet(set.Events, event_id, event.getAttributes(), removeKeys);
 				event_id++;
 			}
 			trace_id++;
@@ -177,12 +178,14 @@ public class TraceTable {
 		}
 		return null;
 	}
-	private static void createSet(Table table, int index, XAttributeMap map) {
+	private static void createSet(Table table, int index, XAttributeMap map, ArrayList<String> remove) {
 		for (Entry<String, Column> e : table.entrySet()) {
 			Column c = e.getValue();
 			XAttribute a = map.get(e.getKey());
-			if (a == null)
+			if (a == null) {
+				remove.add(e.getKey());
 				continue;
+			}
 			switch (c.kind()) {
 			case Boolean:
 				((ColumnBoolean)c).set(index, ((XAttributeBoolean)a).getValue());
@@ -206,5 +209,7 @@ public class TraceTable {
 				break;
 			}
 		}
+		table.removeAll(remove);
+		remove.clear();
 	}
 }

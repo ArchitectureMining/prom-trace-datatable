@@ -20,6 +20,9 @@ public abstract class Column {
 
 	public abstract ColumnType kind();
 	public abstract int length();
+	
+	public abstract Object getObject(int index);
+	public abstract void setObject(int index, Object value);
 
 	public void write(Appendable out) throws IOException {
 		this.write(out, new Gson());
@@ -210,15 +213,15 @@ public abstract class Column {
 			}
 		}
 	}
-	private static void heapSort(Column[] columns, int[] indices) {
+	private static void heapSort(Column[] order, int[] indices) {
 		// We rock our own in-place sorting algorithm as that's much more efficient
 		// Possible improvement is to add bottom-up heapsort
 		for (int start = (indices.length / 2) - 1; start >= 0; start--)
-			heapify(columns, indices, start, indices.length - 1);
+			heapify(order, indices, start, indices.length - 1);
 
 		for (int end = indices.length - 1; end > 0; end--) {
 			swapValues(indices, end, 0);
-			heapify(columns, indices, 0, end - 1);
+			heapify(order, indices, 0, end - 1);
 		}
 	}
 	private static void heapify(Column[] columns, int[] indices, int start, int end) {

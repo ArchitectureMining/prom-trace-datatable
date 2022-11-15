@@ -86,6 +86,13 @@ public class Table {
 	public Column remove(String key) {
 		return this.Columns.remove(key);
 	}
+	public boolean removeAll(Collection<String> keys) {
+		boolean changed = false;
+		for (String key : keys) {
+			changed |= this.remove(key) != null;
+		}
+		return changed;
+	}
 	public void clear() {
 		this.Columns.clear();
 	}

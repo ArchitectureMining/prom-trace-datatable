@@ -20,6 +20,7 @@ public class ColumnBoolean extends ColumnArrayPrimitive<boolean[], Boolean> {
 	public Column clone() {
 		return new ColumnBoolean(this.values.clone());
 	}
+
 	public boolean get(int i) {
 		return this.values[i];
 	}

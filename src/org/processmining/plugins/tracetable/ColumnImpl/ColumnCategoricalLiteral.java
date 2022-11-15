@@ -34,7 +34,7 @@ public class ColumnCategoricalLiteral extends ColumnCategoricalArrayObject<Strin
 		return true;
 	}
 	protected String intoTypeLiteral(int i) {
-		return this.getMapped(i);
+		return this.getObject(i);
 	}
 	protected boolean canTypeBoolean() {
 		return true;
@@ -46,18 +46,18 @@ public class ColumnCategoricalLiteral extends ColumnCategoricalArrayObject<Strin
 		return ColumnLiteral.canParseContinuous(this.values.get(0));
 	}
 	protected double intoTypeContinuous(int i) {
-		return ColumnLiteral.parseContinuous(this.getMapped(i));
+		return ColumnLiteral.parseContinuous(this.getObject(i));
 	}
 	protected boolean canTypeDiscrete() {
 		return ColumnLiteral.canParseDiscrete(this.values.get(0));
 	}
 	protected long intoTypeDiscrete(int i) {
-		return ColumnLiteral.parseDiscrete(this.getMapped(i));
+		return ColumnLiteral.parseDiscrete(this.getObject(i));
 	}
 	protected boolean canTypeTimestamp() {
 		return ColumnLiteral.canParseTimestamp(this.values.get(0));
 	}
 	protected Date intoTypeTimestamp(int i) throws ParseException {
-		return ColumnLiteral.parseTimestamp(this.getMapped(i));
+		return ColumnLiteral.parseTimestamp(this.getObject(i));
 	}
 }

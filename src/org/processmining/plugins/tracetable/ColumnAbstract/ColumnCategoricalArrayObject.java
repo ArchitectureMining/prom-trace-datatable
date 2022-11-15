@@ -34,7 +34,7 @@ public abstract class ColumnCategoricalArrayObject<I extends Comparable<I>> exte
 	}
 
 	public int compareValues(int i, int j) {
-		return this.getMapped(i).compareTo(this.getMapped(j));
+		return this.getObject(i).compareTo(this.getObject(j));
 	}
 	public void swapValues(int i, int j) {
 		int t = this.indices[i];
@@ -44,11 +44,29 @@ public abstract class ColumnCategoricalArrayObject<I extends Comparable<I>> exte
 	public void copyValuesTo(Column to, int start_from, int start_to, int count) {
 		@SuppressWarnings("unchecked")
 		ColumnCategoricalArrayObject<I> c = (ColumnCategoricalArrayObject<I>) to;
+		if (c.values.isEmpty() || c.values.equals(this.values)) {
+			c.values = (ArrayList<I>) this.values.clone();
+			this.copyValuesToUnchecked(c, start_from, start_to, count);
+		}
+		else
+			this.copyValuesToChecked(c, start_from, start_to, count);
+	}
+	private void copyValuesToUnchecked(ColumnCategoricalArrayObject<I> to, int start_from, int start_to, int count) {
+		System.arraycopy(this.indices, start_from, to.indices, start_to, count);
+	}
+	private void copyValuesToChecked(ColumnCategoricalArrayObject<I> to, int start_from, int start_to, int count) {
 		int[] map = new int[this.values.size()];
 		for (int i = 0; i < map.length; i++)
-			map[i] = c.getOrAddIndex(this.values.get(i));
+			map[i] = to.getOrAddIndex(this.values.get(i));
 		for (int i = 0; i < count; i++)
-			c.indices[start_to + i] = map[this.indices[start_from + i]];
+			to.indices[start_to + i] = map[this.indices[start_from + i]];
+	}
+
+	public void copyMap(Column to) {
+		@SuppressWarnings("unchecked")
+		ColumnCategoricalArrayObject<I> c = (ColumnCategoricalArrayObject<I>) to;
+		c.values.clear();
+		c.values.addAll(this.values);
 	}
 
 	@Override
@@ -57,7 +75,7 @@ public abstract class ColumnCategoricalArrayObject<I extends Comparable<I>> exte
 	}
 	@Override
 	protected String intoTypeLiteral(int i) {
-		return this.getMapped(i).toString();
+		return this.getObject(i).toString();
 	}
 	@Override
 	protected ColumnCategoricalLiteral intoTypeCategoricalLiteral() {
@@ -68,11 +86,16 @@ public abstract class ColumnCategoricalArrayObject<I extends Comparable<I>> exte
 		return c;
 	}
 
+	public I getObject(int i) {
+		return this.map(this.get(i));
+	}
+	@SuppressWarnings("unchecked")
+	public void setObject(int i, Object v) {
+		this.set(i, (I)v);
+	}
+
 	public int get(int i) {
 		return this.indices[i];
-	}
-	public I getMapped(int i) {
-		return this.map(this.get(i));
 	}
 	public I map(int i) {
 		return this.values.get(i);
@@ -90,5 +113,8 @@ public abstract class ColumnCategoricalArrayObject<I extends Comparable<I>> exte
 	}
 	public void set(int i, int v) {
 		this.indices[i] = v;
+	}
+	public void setMap(int i, I v) {
+		this.values.set(i, v);
 	}
 }

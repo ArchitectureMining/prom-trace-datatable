@@ -26,23 +26,23 @@ public abstract class ColumnArrayPrimitive<A, I extends Comparable<I>> extends C
 		this.values = gson.fromJson(s, this.getValuesClass());
 	}
 
-	private static Object get(Object a, int i) {
-		return java.lang.reflect.Array.get(a, i);
+	public Object getObject(int i) {
+		return java.lang.reflect.Array.get(this.values, i);
 	}
-	private void set(Object a, int i, Object v) {
-		java.lang.reflect.Array.set(a, i, v);
+	public void setObject(int i, Object v) {
+		java.lang.reflect.Array.set(this.values, i, v);
 	}
 	public int compareValues(int i, int j) {
 		@SuppressWarnings("unchecked")
-		I oi = (I) get(this.values, i);
+		I oi = (I) getObject(i);
 		@SuppressWarnings("unchecked")
-		I oj = (I) get(this.values, j);
+		I oj = (I) getObject(j);
 		return oi.compareTo(oj);
 	}
 	public void swapValues(int i, int j) {
-		Object oi = get(this.values, i);
-		this.set(this.values, i, this.get(this.values, j));
-		this.set(this.values, j, oi);
+		Object oi = getObject(i);
+		this.setObject(i, this.getObject(j));
+		this.setObject(j, oi);
 	}
 
 	@Override
@@ -51,7 +51,7 @@ public abstract class ColumnArrayPrimitive<A, I extends Comparable<I>> extends C
 	}
 	@Override
 	protected String intoTypeLiteral(int i) {
-		return get(this.values, i).toString();
+		return getObject(i).toString();
 	}
 
 	@SuppressWarnings("unchecked")
