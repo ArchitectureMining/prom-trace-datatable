@@ -47,8 +47,7 @@ public abstract class ColumnCategoricalArrayObject<I extends Comparable<I>> exte
 		if (c.values.isEmpty() || c.values.equals(this.values)) {
 			c.values = (ArrayList<I>) this.values.clone();
 			this.copyValuesToUnchecked(c, start_from, start_to, count);
-		}
-		else
+		} else
 			this.copyValuesToChecked(c, start_from, start_to, count);
 	}
 	private void copyValuesToUnchecked(ColumnCategoricalArrayObject<I> to, int start_from, int start_to, int count) {

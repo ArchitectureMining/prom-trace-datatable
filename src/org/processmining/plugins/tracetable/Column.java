@@ -20,7 +20,7 @@ public abstract class Column {
 
 	public abstract ColumnType kind();
 	public abstract int length();
-	
+
 	public abstract Object getObject(int index);
 	public abstract void setObject(int index, Object value);
 

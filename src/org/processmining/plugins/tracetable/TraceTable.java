@@ -121,14 +121,13 @@ public class TraceTable {
 		assert(this.Events.length() == remove.length);
 		ColumnDiscrete ids = this.EventMeta.getDiscrete(MetaTraceId);
 		ColumnDiscrete counts = this.TraceMeta.getDiscrete(MetaEventCount);
-		
+
 		int total = 0;
 		for (int i = 0; i < remove.length; i++) {
 			if (remove[i]) {
 				int idx = (int) ids.get(i);
 				counts.set(idx, counts.get(idx) - 1);
-			}
-			else
+			} else
 				total++;
 		}
 
