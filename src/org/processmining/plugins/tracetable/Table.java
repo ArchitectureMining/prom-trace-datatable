@@ -2,10 +2,12 @@ package org.processmining.plugins.tracetable;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.processmining.plugins.tracetable.ColumnImpl.ColumnBoolean;
 import org.processmining.plugins.tracetable.ColumnImpl.ColumnCategoricalLiteral;
@@ -13,8 +15,6 @@ import org.processmining.plugins.tracetable.ColumnImpl.ColumnContinuous;
 import org.processmining.plugins.tracetable.ColumnImpl.ColumnDiscrete;
 import org.processmining.plugins.tracetable.ColumnImpl.ColumnLiteral;
 import org.processmining.plugins.tracetable.ColumnImpl.ColumnTimestamp;
-
-import java.util.Set;
 
 import com.google.gson.Gson;
 
@@ -152,5 +152,23 @@ public class Table {
 			other.Columns.put(e.getKey(), e.getValue().clone());
 		}
 		return other;
+	}
+
+	protected Table removeWhere(boolean[] remove, int newsize) {
+		assert(this.length() == remove.length);
+		Table newEvents = new Table(newsize);
+		ArrayList<String> keys = new ArrayList<String>(this.keySet());
+
+		for (String key : keys) {
+			Column from = this.remove(key);
+			Column to = newEvents.add(key, from.kind());
+			int index = 0;
+			for(int i = 0; i < from.length(); i++) {
+				if (remove[i]) continue;
+				to.setObject(index, from.getObject(index));
+				index++;
+			}
+		}
+		return newEvents;
 	}
 }

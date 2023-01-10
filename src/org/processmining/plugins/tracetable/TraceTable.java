@@ -36,8 +36,8 @@ public class TraceTable {
 	// Required
 	public static final String MetaTraceId = "meta:trace_id";
 
-	public final Table Traces, TraceMeta;
-	public final Table Events, EventMeta;
+	public Table Traces, TraceMeta;
+	public Table Events, EventMeta;
 
 	public TraceTable(Table traces, ColumnDiscrete event_count, Table events) {
 		this.Traces = traces;
@@ -116,6 +116,24 @@ public class TraceTable {
 		for (int e = 0; e < event_ids.length(); e++) {
 			event_ids.set(e, trace_ids_map[(int) event_ids.get(e)]);
 		}
+	}
+	public void removeWhere(boolean[] remove) {
+		assert(this.Events.length() == remove.length);
+		ColumnDiscrete ids = this.EventMeta.getDiscrete(MetaTraceId);
+		ColumnDiscrete counts = this.TraceMeta.getDiscrete(MetaEventCount);
+		
+		int total = 0;
+		for (int i = 0; i < remove.length; i++) {
+			if (remove[i]) {
+				int idx = (int) ids.get(i);
+				counts.set(idx, counts.get(idx) - 1);
+			}
+			else
+				total++;
+		}
+
+		this.Events = this.Events.removeWhere(remove, total);
+		this.EventMeta = this.EventMeta.removeWhere(remove, total);
 	}
 
 	public void write(Appendable out) throws IOException {
